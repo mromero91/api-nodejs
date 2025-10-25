@@ -1,20 +1,24 @@
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: aura-postgres
+  app:
+    build: .
+    container_name: aura-backend
     environment:
-      POSTGRES_DB: api_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: api_password
+      - NODE_ENV=${NODE_ENV:-production}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
+      - PORT=${PORT:-3000}
+      - BCRYPT_ROUNDS=${BCRYPT_ROUNDS:-12}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - "3000:3000"
     networks:
       - aura-network
-volumes:
-  postgres_data:
 
 networks:
   aura-network:
